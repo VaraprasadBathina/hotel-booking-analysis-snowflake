@@ -1,81 +1,90 @@
-**🏨 Hotel Booking Analysis – End-to-End Snowflake Data Engineering Project**
+# 🏨 Hotel Booking Analysis – End-to-End Snowflake Data Engineering Project
 
-This project is a fully Snowflake-native data engineering pipeline that transforms raw, inconsistent hotel booking data into clean, structured, and analytics-ready insights.
-The entire workflow ingestion, cleaning, modeling, aggregation, and visualization is built completely inside Snowflake, without any external ETL tools, Python notebooks, or BI platforms.
+This project demonstrates how to build a complete Snowflake-native data engineering pipeline that transforms messy hotel booking data into clean, structured, and analytics-ready insights.
+Every step — ingestion, cleaning, modeling, aggregation, and dashboarding — is performed entirely inside Snowflake, without Python, dbt, Airflow, PowerBI, or Tableau.
 
-**📌 Problem Statement**
+# 📐 Architecture Overview
 
-The hotel client provided monthly booking data in a single raw CSV file. The file contained several data quality issues:
+Below is the architecture used for this project. The pipeline follows the Medallion model (Bronze → Silver → Gold), all implemented within Snowflake.
 
-Dates stored as plain text
+<img width="2912" height="1472" alt="Gemini_Generated_Image_ig5l2tig5l2tig5l" src="https://github.com/user-attachments/assets/6cd644ff-4265-447b-8f8e-94e8ea4d4ebb" />
 
-Numbers stored as strings
 
-Negative values in the total amount column
+# 🧩 Problem Statement
 
-Misspelled city names and booking statuses
+The hotel chain provided booking data in a single raw CSV file containing structural inconsistencies and data quality issues. This prevented management from generating reliable reports and understanding core business performance metrics.
 
-Records with checkout dates earlier than check-in dates
+Key issues in the raw data:
 
-Missing or invalid email addresses
+Dates stored as plain strings
 
-Inconsistent formatting across rows
+Numeric values stored as text
 
-Because of this, management couldn't reliably answer key business questions such as:
+Negative revenue values
 
-What is our monthly revenue?
+Typos in city names and booking status
 
-How many bookings do we get each month?
+Missing or invalid email formats
 
-Which cities generate the highest revenue?
+Logical errors (checkout < check-in)
 
-How many bookings are confirmed, canceled, or pending?
+Nulls and empty strings used interchangeably
 
-What are the top-performing room types?
+Because of these issues, the business could not answer:
 
-The business needed a clean, automated pipeline that produced accurate metrics and dashboards from inconsistent data.
+What is the monthly revenue?
 
-**📌 Business Requirements**
+How many bookings were made each month?
 
-The client specified the following requirements:
+Which cities contribute the most revenue?
 
-1. Clean and Standardized Data
+What is the distribution across room types?
 
-Convert all columns into correct data types
+What percentage of bookings are confirmed vs canceled?
 
-Standardize text fields (city names, status)
+What is the Average Booking Value?
 
-Validate and correct email formats
+The goal was to build a fully automated pipeline that delivers clean, trusted, analytics-ready data.
 
-Fix negative revenue amounts
+# 📌 Business Requirements
 
-Remove logically invalid records
+The client required the following:
 
-Enforce consistent NULL handling
+1. High-quality, standardized booking data
 
-2. Monthly Trends
+Convert all fields to correct data types
 
-Monthly revenue
+Standardize text formatting (city names, status)
 
-Monthly booking volume
+Validate and correct emails
 
-Support for seasonal analysis
+Replace negative amounts using business logic
 
-3. City-Level Revenue Insights
+Remove invalid bookings
 
-Total revenue per city
+2. Monthly performance reporting
 
-Ranking of top-performing cities
+Monthly revenue trend
 
-4. Booking Distribution
+Monthly booking counts
+
+3. City-level revenue insights
+
+Identify top revenue-generating cities
+
+Compare performance across branches
+
+4. Operational analytics
 
 Room type distribution
 
 Booking status breakdown
 
-5. KPI Metrics
+Guest counts
 
-The dashboard needed to show:
+5. Executive KPIs
+
+The dashboard must show:
 
 Total Revenue
 
@@ -85,110 +94,149 @@ Total Guests
 
 Average Booking Value
 
-6. Fully Snowflake-Native Dashboard
+6. 100% Snowflake implementation
 
-All visuals must be created using Snow Site, using only Snowflake tables as the backend.
+All ingestion, transformation, and visualization must remain inside Snowflake, using:
 
-**📌 What I Built**
+Snowflake Stage
 
-I designed and implemented a complete Bronze → Silver → Gold Snowflake pipeline:
+Snowflake File Format
 
-Bronze Layer: Raw ingestion
+Snowflake SQL
 
-Silver Layer: Data cleaning, standardization, validation
+Medallion Architecture
 
-Gold Layer: Aggregation tables for business reporting
+Snowsight (Snowflake’s native dashboarding tool)
 
-Snow Site Dashboard: Monthly trends, city insights, booking analysis, and KPIs
+# 🏗️ What I Built
 
-Every step is implemented using SQL inside Snowflake, making it simple, maintainable, and scalable.
+I developed a complete Snowflake Medallion Pipeline:
 
-**📌 How I Built It**
-1. Bronze Layer – Raw Ingestion
+## 🟤 Bronze Layer
 
-Created a Snowflake database and schema
+Ingest raw CSV data exactly as received.
 
-Defined a CSV file format (skip header, handle NULLs, ignore quotes)
+## ⚪ Silver Layer
 
-Uploaded the raw CSV file to a Snowflake Stage
+Clean, validate, and standardize the dataset:
 
-Loaded data into a Bronze table with all columns stored as VARCHAR
+Date conversions
 
-Allowed partial loads using ON ERROR = CONTINUE
+Numeric transformations
 
-Preserved bad records for later inspection
+City name formatting
 
-This layer represents the untouched raw data exactly as received.
+Email validation
 
-2. Silver Layer – Data Cleaning & Standardization
+Negative revenue correction
 
-The Silver table was created with proper data types (DATE, INTEGER, FLOAT, etc.).
+271 invalid rows removed
 
-Cleaning steps applied:
+## 🟡 Gold Layer
 
-Converted all date fields using TRY_TO_DATE
+Create analytics-ready tables:
 
-Converted numeric fields using TRY_TO_NUMBER
+Monthly metrics
 
-Standardized city names with INITCAP() and TRIM()
+City-level revenue table
 
-Fixed negative revenue using ABS()
+Master cleaned dataset for KPIs
 
-Validated email addresses
+# 📊 Dashboard (Snowsight)
 
-Standardized booking statuses (corrected misspellings)
+A final business dashboard that displays:
 
-Removed 271 invalid records where checkout < check-in
+Monthly revenue
 
-The Silver layer ensures high data quality and consistency.
+Monthly bookings
 
-3. Gold Layer – Business Aggregations
+Top revenue cities
 
-Three business-focused Gold tables were created:
+Room type analysis
 
-Gold Table 1: Monthly & Daily Metrics
+Booking status distribution
+
+KPI scorecards
+
+# 🔄 How the Pipeline Works
+1. Data Ingestion (Bronze Layer)
+
+Created FILE FORMAT to correctly parse CSV
+
+Loaded file into a Snowflake Stage
+
+Used COPY INTO Bronze_Hotel_Booking
+
+All fields stored as VARCHAR
+
+Error-tolerant ingestion (ON ERROR = CONTINUE)
+
+2. Data Cleaning (Silver Layer)
+
+Steps applied:
+
+Convert text fields into proper DATE, INTEGER, FLOAT
+
+Standardize city names: INITCAP(TRIM(city))
+
+Convert negative total amounts using ABS()
+
+Validate email format using pattern matching
+
+Fix booking status typos
+
+Remove 271 rows where checkout < check-in
+
+The Silver layer contains clean, validated, trustworthy data.
+
+3. Business Aggregations (Gold Layer)
+Gold Table 1 — Daily/Monthly Metrics
 
 Total bookings per day
 
 Total revenue per day
 
-Aggregated into month-level metrics
+Supports monthly trend charts
 
-Gold Table 2: City Revenue Table
+Gold Table 2 — City Revenue Table
 
-Total revenue per city
+Revenue grouped by city
 
-Sorted for identifying top cities
+Ranked for top-5 city charts
 
-Gold Table 3: Master Clean Table
+Gold Table 3 — Master Clean Table
 
-All 13 cleaned and standardized columns
+All cleaned columns
 
-Used for KPIs and detailed insights
+Used for KPIs and detailed analytics
 
-These tables serve as the source of truth for all reporting and visualization.
+# 📊 Dashboard (Snowsight)
 
-**📌 Dashboard (Snow Site)**
-
-The Hotel Bookings Analytics dashboard includes:
+The Hotel Booking Analytics Dashboard includes:
 
 📈 Monthly Trends
 
-Monthly revenue
+Monthly Revenue
 
-Monthly booking count
+Monthly Bookings
 
-🏙️ City Insights
+🏙️ City-Level Analysis
 
-Top 5 revenue-generating cities
+Top 5 Revenue-Generating Cities
 
-🛏 Room & Status Analysis
+🛏 Room Types
 
-Room type distribution
+Booking distribution by room type
 
-Booking status summary
+📊 Booking Status
 
-🔢 KPI Scorecards
+Confirmed
+
+Canceled
+
+No-show
+
+🔢 KPIs
 
 Total Revenue
 
@@ -198,37 +246,27 @@ Total Guests
 
 Average Booking Value
 
-All visuals are powered directly from Gold tables to ensure accuracy.
+All visuals are built inside Snowsight, sourced directly from Gold tables.
 
 
-**🧰 Tech Stack**
+# 🧰 Tech Stack
 
-Snowflake Cloud Data Platform
+Snowflake
 
 Snowflake SQL
 
-File Formats (CSV)
+Snowflake Stage
 
-Snowflake Stages
+File Format (CSV)
 
-Snowflake Medallion Architecture
+Snowsight Dashboard
 
-Snow Site (Native Dashboarding)
+Medallion Architecture
 
-**📌 Summary**
+# 📬 Contact
 
-This project demonstrates:
+If you’d like to connect or discuss data engineering projects:
 
-End-to-end data engineering inside Snowflake
+LinkedIn: https://www.linkedin.com/in/lakshmi-prasad-b-91a67b198/
 
-Scalable Medallion architecture
-
-Automated cleaning + validation logic
-
-Accurate business aggregation tables
-
-A fully Snowflake-native dashboard
-
-A clean SQL-only implementation
-
-It is production-ready, easy to maintain, and suitable as a real-world data engineering solution.
+Email: blaxmiprasad6@gmail.com
