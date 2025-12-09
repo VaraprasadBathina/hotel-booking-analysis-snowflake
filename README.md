@@ -1,9 +1,9 @@
-#🏨 Hotel Booking Analysis – End-to-End Snowflake Data Engineering Project
+🏨 Hotel Booking Analysis – End-to-End Snowflake Data Engineering Project
 
 This project is a fully Snowflake-native data engineering pipeline that transforms raw, inconsistent hotel booking data into clean, structured, and analytics-ready insights.
 The entire workflow — ingestion, cleaning, modeling, aggregation, and visualization — is built completely inside Snowflake, without any external ETL tools, Python notebooks, or BI platforms.
 
-#📌 Problem Statement
+📌 Problem Statement
 
 The hotel client provided monthly booking data in a single raw CSV file. The file contained several data quality issues:
 
@@ -35,7 +35,7 @@ What are the top-performing room types?
 
 The business needed a clean, automated pipeline that produced accurate metrics and dashboards from inconsistent data.
 
-#📌 Business Requirements
+📌 Business Requirements
 
 The client specified the following requirements:
 
@@ -89,7 +89,7 @@ Average Booking Value
 
 All visuals must be created using Snow Site, using only Snowflake tables as the backend.
 
-#📌 What I Built
+📌 What I Built
 
 I designed and implemented a complete Bronze → Silver → Gold Snowflake pipeline:
 
@@ -103,7 +103,7 @@ Snow Site Dashboard: Monthly trends, city insights, booking analysis, and KPIs
 
 Every step is implemented using SQL inside Snowflake, making it simple, maintainable, and scalable.
 
-#📌 How I Built It
+📌 How I Built It
 1. Bronze Layer – Raw Ingestion
 
 Created a Snowflake database and schema
@@ -168,7 +168,7 @@ Used for KPIs and detailed insights
 
 These tables serve as the source of truth for all reporting and visualization.
 
-#📌 Dashboard (Snow Site)
+📌 Dashboard (Snow Site)
 
 The Hotel Bookings Analytics dashboard includes:
 
@@ -201,7 +201,7 @@ Average Booking Value
 All visuals are powered directly from Gold tables to ensure accuracy.
 
 
-#🧰 Tech Stack
+🧰 Tech Stack
 
 Snowflake Cloud Data Platform
 
@@ -215,7 +215,7 @@ Snowflake Medallion Architecture
 
 Snow Site (Native Dashboarding)
 
-#📌 Summary
+📌 Summary
 
 This project demonstrates:
 
