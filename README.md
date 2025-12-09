@@ -1,7 +1,7 @@
 **🏨 Hotel Booking Analysis – End-to-End Snowflake Data Engineering Project**
 
 This project is a fully Snowflake-native data engineering pipeline that transforms raw, inconsistent hotel booking data into clean, structured, and analytics-ready insights.
-The entire workflow — ingestion, cleaning, modeling, aggregation, and visualization — is built completely inside Snowflake, without any external ETL tools, Python notebooks, or BI platforms.
+The entire workflow ingestion, cleaning, modeling, aggregation, and visualization is built completely inside Snowflake, without any external ETL tools, Python notebooks, or BI platforms.
 
 **📌 Problem Statement**
 
